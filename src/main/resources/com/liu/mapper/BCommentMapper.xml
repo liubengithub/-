@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.BCommentMapper">
+       <insert id="saveComment" parameterType="com.liu.entity.AllComment">
+           insert into blog.comment(nick_name,email,content,avatar,create_time,parent_comment_id)
+           values(#{nickName},#{email},#{content},#{avatar},#{createTime},#{parentCommentId})
+       </insert>
+        <select id="findAllParentComment" resultType="com.liu.entity.AllComment">
+            select *
+            from blog.comment c
+            where c.parent_comment_id = #{parentId}
+            order by c.create_time desc
+        </select>
+        <select id="findFirstChildComment" resultType="com.liu.entity.AllComment">
+            select *
+            from blog.comment c
+            where c.parent_comment_id = #{parentId}
+            order by c.create_time desc
+        </select>
+         <select id="findReplyComment" resultType="com.liu.entity.AllComment">
+            select *
+            from blog.comment c
+            where c.parent_comment_id = #{parentId}
+            order by c.create_time desc
+        </select>
+
+</mapper>

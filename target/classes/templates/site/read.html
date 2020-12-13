@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+	<meta name="author" content="www.lzqcode.com" />
+    <title>文章阅读</title>
+    <link rel="stylesheet" th:href="@{/site/font-awesome/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/site/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/master.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/gloable.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/nprogress.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/blog.css}" />
+</head>
+<body>
+    <div class="header">
+    </div>
+   <div th:replace="comm/commons::topbar"></div>
+    <div class="doc-container" id="doc-container">
+        <div class="container-fixed">
+            <div class="col-content" style="width:100%">
+                <div class="inner">
+                    <article class="article-list">
+                        <input type="hidden" value="@Model.BlogTypeID" id="blogtypeid" />
+                        <div class="article-item">
+                            <aside class="title" style="line-height:1.5;">
+                                <h4 th:text="${blog.title}">Java学习路线推荐</h4>
+                                <p class="fc-grey fs-14">
+                                    <small>
+                                        作者：<a th:href="@{javascript:void(0)}" target="_blank" class="fc-link" th:text="${blog.nickName}">小刘</a>
+                                    </small>
+                                    <small class="ml10">围观群众：<i class="readcount" th:text="${blog.views}">121</i></small>
+                                    <small class="ml10">更新于 <label th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd HH-mm-ss')}">2020-07-1:11:20:21</label> </small>
+                                </p>
+                            </aside>
+                            <div class="time mt10" style="padding-bottom:0;">
+                                <span class="day" th:text="${#dates.day(blog.createTime)}">1</span>
+                                <span class="month fs-18" th:text="${#dates.month(blog.createTime)}">7<small class="fs-14">月</small></span>
+                                <span class="year fs-18" th:text="${#dates.year(blog.createTime)}">2020</span>
+                            </div>
+                            <div class="content artiledetail" style="border-bottom: 1px solid #e1e2e0; padding-bottom: 20px;" th:text="${blog.content}">
+
+                                  这篇文章是为了介绍自己自学用过的Java视频资料。本套整合教程总共180+G，共450+小时。考虑到绝大部分视频至少要看两遍，而且视频总时长并不代表学习时长，所以零基础初学者总学习时间大约为：600小时视频时长 + 100小时理解 + 100小时练习，至少需要800小时。你可能觉得自己能一天学习8小时，实际上平均下来每天能学4小时都算厉害了。总会有各种原因，比如当天内容太难，公司聚会，要出差等等。如果周末你也是坚持学习，那么最理想状况下，6个半月就可以学完，达到工作后能被人带的水平。但我知道那其实基本不可能。我自己从完全零基础，到学C语言，到学Java，除去中间断开的两个月，已经学习10个月。当然，这和我边工作边学习，以及没有人帮我找资料有很大关系。很多时间花在找资料上了。如果你已经经历过JavaSE的洗礼，会明白，我这篇回答对现在迷茫的你份量有多重，avaSE阶段，建议完全零基础的朋友，直接看刘意老师的，辅助看毕老师的。当然，也可以都试看一下再决定，每个人喜好不同。放心，完全零基础的朋友，一遍肯定学不会。所以同一套视频看两遍都算少了。另外，有时一个老师的观点是片面的，要结合不同老师的讲解才可能对一个知识点有更全面深刻的理解（前提是先把一个老师的讲解吃透）。所以我是建议刘意和毕向东的都至少看两遍。
+                            </div>
+                            <div class="content artiledetail" style="border-bottom: 1px solid #e1e2e0; padding-bottom: 20px;"\>
+                                <div class="copyright mt20">
+                                    <p class="f-toe fc-black">
+                                        非特殊说明，本文版权归 ZQ个人博客 所有，转载请注明出处.
+                                    </p>
+                                    <p class="f-toe">
+                                        本文标题：
+                                        <a th:href="@{javascript:void(0)}" class="r-title" th:text="${blog.title}">Java学习路线推荐</a>
+                                    </p>
+                                    <p class="f-toe">
+                                        本文网址：
+                                        <a th:href="@{#}">http://www.lzqcode.com</a>
+                                    </p>
+                                </div>
+                                <div id="aplayer" style="margin:5px 0"></div>
+                                <div>
+                                <h6>延伸阅读</h6>
+                                <ol class="b-relation"></ol>
+                                上一篇：<a  th:text="${blog.getPreTitle()}" th:href="@{/read/{id}(id=${blog.preId})}">没有上一篇了</a><br>
+                                下一篇：<a th:text="${blog.getNextTitle()}" th:href="@{/read/{id}(id=${blog.nextId})}">没有下一篇了</a>
+                                </div>
+                            </div>
+                            <div class="f-cb"></div>
+                            <div class="mt20 f-fwn fs-24 fc-grey comment" style="border-top: 1px solid #e1e2e0; padding-top: 20px;">
+                            </div>
+                            
+                            </div>
+
+
+                        </section>
+
+                    </article>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{comm/commons::footbar}"></div>
+    <script th:src="@{/site/layui/layui.js}"></script>
+    <script th:src="@{/site/js/yss/gloable.js}"></script>
+    <script th:src="@{/site/js/plugins/nprogress.js}"></script>
+    <script th:src="@{/site/js/pagecomment.js}"></script>
+    <script>NProgress.start();</script>
+    <script> 
+        window.onload = function () {
+            NProgress.done();
+        };
+    </script>
+</body>
+</html>

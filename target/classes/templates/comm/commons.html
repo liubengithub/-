@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+//头部
+<header class="gird-header" th:fragment="topbar">
+    <div class="header-fixed">
+        <div class="header-inner">
+            <a th:href="@{javascript:void(0)}" class="header-logo" id="logo">Mr.liu</a>
+            <nav class="nav" id="nav">
+                <ul>
+                    <li><a th:href="@{/index}">首页</a></li>
+                    <li><a th:href="@{/article}">博客</a></li>
+                    <li><a th:href="@{/message}">留言</a></li>
+                    <li><a th:href="@{/diary}">日记</a></li>
+                    <li><a th:href="@{/link}">友链</a></li>
+                </ul>
+            </nav>
+            <a th:href="@{/User/QQLogin}" class="blog-user">
+                <i class="fa fa-qq"></i>
+            </a>
+            <a class="phone-menu">
+                <i></i>
+                <i></i>
+                <i></i>
+            </a>
+        </div>
+    </div>
+</header>
+//脚部
+<footer class="grid-footer" th:fragment="footbar">
+    <div class="footer-fixed">
+        <div class="copyright">
+            <div class="info">
+                <div class="contact">
+                    <a th:href="@{javascript:void(0)}" class="github" target="_blank"><i class="fa fa-github"></i></a>
+                    <a th:href="@{https://wpa.qq.com/msgrd?v=3&uin=930054439&site=qq&menu=yes}" class="qq" target="_blank" title="930054439"><i class="fa fa-qq"></i></a>
+                    <a th:href="@{https://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=gbiysbG0tbWyuMHw8K-i7uw}" class="email" target="_blank" title="930054439@qq.com"><i class="fa fa-envelope"></i></a>
+                    <a th:href="@{javascript:void(0)}" class="weixin"><i class="fa fa-weixin"></i></a>
+                </div>
+                <p class="mt05">
+                    Copyright &copy; 2019-2020 ZQ博客 All Rights Reserved V.3.1.3 Power by ZQ博客
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.TypeMapper">
+    <select id="typeList" resultType="Type">
+        select * from blog.t_type
+    </select>
+    <select id="getTypeById" resultType="Type">
+        select * from blog.t_type where id = #{id}
+    </select>
+    <select id="getTypeByName" resultType="Type">
+        select * from blog.t_type where name = #{name}
+    </select>
+    <delete id="deleteTypeById">
+        delete from blog.t_type where id = #{id}
+    </delete>
+    <update id="updateType" parameterType="Type">
+        update blog.t_type set name = #{name} where id = #{id}
+    </update>
+    <insert id="saveType" parameterType="Type">
+        insert into blog.t_type values(#{id},#{name})
+    </insert>
+    <select id="getType" resultType="Type">
+        select name from blog.t_type limit 4
+    </select>
+</mapper>

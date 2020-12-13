@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="author" content="www.lzqcode.com" />
+    <meta name="robots" content="all" />
+    <title>留言板</title>
+    <link rel="stylesheet" th:href="@{/site/font-awesome/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/site/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/master.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/gloable.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/nprogress.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/message.css}" /> 
+</head>
+<body>
+    <div class="header">
+    </div>
+    <div th:replace="~{comm/commons::topbar}"></div>
+    <div class="doc-container" id="doc-container">
+        <div class="container-fixed">
+    <div class="container-inner">
+        <section class="msg-remark">
+            <h1>留言板</h1>
+            <p>
+                沟通交流，拉近你我！
+            </p>
+        </section>
+        <div class="textarea-wrap message" id="textarea-wrap">
+            <form class="layui-form blog-editor" th:action="@{/addMessage}" th:method="post">
+                <input type="hidden" id="parentCommentId" name="parentCommentId" value="-1"></input>
+                <input type="hidden" id="nickName" name="nickName" value="游客"></input>
+                <input type="hidden" id="id" name="id"></input>
+                <div class="layui-form-item">
+                    <textarea  lay-verify="content" id="remarkEditor" name="content" placeholder="请输入内容" class="layui-textarea layui-hide"></textarea>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn" lay-submit="formLeaveMessage" lay-filter="formLeaveMessage">提交留言</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="f-cb"></div>
+    <div class="mt20">
+        <ul class="message-list" id="message-list">
+            <li class="zoomIn article"   th:each="comment : ${comments}">
+                <div class="comment-parent">
+                    <a name="remark-1"></a>
+                    <img th:src="@{/site/image/t2.png}" />
+                    <div class="info">
+                        <span class="username" th:text="${comment.getNickName()}">冰</span>
+                    </div>
+                    <div class="comment-content" th:text="${comment.getContent()}">
+                        大哥带一下
+                    </div>
+                    <p class="info info-footer">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                        <span>深圳</span> 
+                        <span class="comment-time" th:text="${#dates.format(comment.getCreateTime(),'yyyy-MM-dd HH:mm:ss')}">2020-07-01</span>
+                        <a th:href="@{javascript:;}" class="btn-reply" th:data-targetname="${comment.getNickName()}" th:data-targetid="${comment.getId()}" >回复</a>
+                    </p>
+                </div>
+                <hr />
+
+                    <div class="comment-child" th:each="replyComment : ${comment.getReplyComments()}" >
+                        <a name="reply-1"></a>
+                        <img th:src="@{/site/image/admin_img.png}">
+                        <div class="info">
+                            <span class="username" th:text="${replyComment.getNickName()}">小刘</span>
+                            <span style="padding-right:0;margin-left:-5px;">回复</span>
+                            <span class="username" th:text="${replyComment.getParentNickName()}">冰</span>
+                            <span th:text="${replyComment.getContent()}">哈哈哈哈哈哈哈哈哈哈或或或或或或或或或或或或或或或</span>
+                        </div>
+                        <p class="info">
+                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                            <span>深圳</span>
+                            <span class="comment-time" th:text="${#dates.format(replyComment.getCreateTime(),'yyyy-MM-dd HH:mm:ss')}">2018-01-01</span>
+                            <a  th:href="@{javascript:;}" class="btn-reply"  th:data-targetname="${replyComment.getNickName()}" th:data-targetid="${replyComment.getId()}">回复</a>
+                        </p>
+
+
+                    </div>
+
+                <div class="replycontainer layui-hide">
+                    <form class="layui-form" th:action="@{/toReply}" method="post">
+                        <input type="hidden" name="id">
+                        <input type="text" name="parentCommentId" value="1">
+                        <input type="hidden" name="nickName" value="游客">
+                        <div class="layui-form-item">
+                            <textarea name="content" lay-verify="replyContent" placeholder="请输入回复内容" class="layui-textarea" style="min-height:80px;"></textarea>
+                        </div>
+                        <div class="layui-form-item">
+                            <button class="layui-btn layui-btn-xs" lay-submit="formReply" lay-filter="formReply">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+    </div>
+    <div th:replace="~{comm/commons::footbar}"></div>
+    <script th:src="@{/site/layui/layui.js}"></script>
+    <script th:src="@{/site/js/yss/gloable.js}"></script>
+    <script th:src="@{/site/js/plugins/nprogress.js}"></script>
+    <script>NProgress.start();</script>
+    <script th:src="@{/site/js/pagemessage.js}"></script>
+    <script>NProgress.start();</script>
+    <script> 
+        window.onload = function () {
+            NProgress.done();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.BlogMapper">
+  <select id="getBlogs" resultMap="BT">
+      select b.id,b.title,b.recommened,b.published,b.update_time,t.id,t.name
+      from blog.t_blog b
+      left outer join blog.t_type t
+      on b.type_id = t.id
+  </select>
+    <resultMap id="BT" type="Blog">
+         <result property="id" column="id"/>
+         <result property="title" column="title"/>
+         <result property="recommened" column="recommened"/>
+         <result property="published" column="published"/>
+         <result property="updateTime" column="update_time"/>
+         <association property="type" javaType="Type">
+             <result property="id" column="id"/>
+             <result property="name" column="name"/>
+         </association>
+    </resultMap>
+    <select id="getBlosByTitleOrType" resultMap="BT">
+      select b.id,b.title,b.recommened,b.published,b.update_time,t.id,t.name
+      from blog.t_blog b
+      left outer join blog.t_type t
+      on b.type_id = t.id
+      where b.title = #{title} AND t.id= #{id}
+    </select>
+     <insert id="addBlog" parameterType="Blog">
+         insert into blog.t_blog(id,appreciation,commentabled,content,create_time,first_picture,flag,published,recommened,share_statement,title,update_time,views,type_id,user_id)
+         values(#{id},#{appreciation},#{commentabled},#{content},#{createTime},#{firstPicture},#{flag},#{published},#{recommened},#{shareStatement},#{title},#{updateTime},#{views},#{type.id},#{user.id})
+     </insert>
+     <delete id="deleteBlogById" parameterType="Long">
+         delete from blog.t_blog where id = #{id}
+     </delete>
+    <select id="getBlogById" resultMap="BT">
+        select b.id,b.title,b.appreciation,b.content,b.first_picture,b.share_statement,b.commentabled,b.recommened,b.published,b.views,b.update_time,b.type_id,t.id,t.name
+      from blog.t_blog b
+      left outer join blog.t_type t
+      on b.type_id = t.id
+      where b.id = #{id}
+    </select>
+    <update id="updateBlog" parameterType="Blog">
+        update blog.t_blog b
+        set b.flag = #{blog.flag},b.title = #{blog.title},b.content = #{blog.content},b.first_picture = #{blog.firstPicture},b.recommened = #{blog.recommened},b.appreciation =#{blog.appreciation},b.commentabled = #{blog.commentabled},b.published = #{blog.published},b.update_time = #{blog.updateTime}
+        where b.id = #{blog.id}
+    </update>
+
+
+<!--    首页-->
+    <select id="getIndexRecommenedArticle" resultMap="indexArticle">
+        select b.id,b.first_picture,t.name,b.type_id,b.create_time,b.update_time,b.content,b.recommened
+        from blog.t_blog b,blog.t_type t
+        where b.type_id = t.id and b.recommened = #{recommened}
+        order by b.create_time desc
+        limit 3
+    </select>
+    <resultMap id="indexArticle" type="com.liu.entity.RecommenedArticle">
+        <result property="id" column="id"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="typeName" column="name"/>
+        <result property="typeId" column="type_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="description" column="description"/>
+        <result property="recommened" column="recommened"/>
+    </resultMap>
+<!--由首页根据类型id查询所有的博客显示在博客页-->
+    <select id="getFirstPageBlogByTypeId" resultMap="firstPageBlog">
+        select b.id,b.title,b.flag,b.first_picture,b.content,b.views,b.recommened,b.create_time,b.update_time,t.name,u.nick_name
+        from blog.t_blog b,blog.t_type t,blog.t_user u
+        where b.type_id = t.id and b.user_id =u.id and b.type_id = #{typeId}
+        order by b.create_time desc
+    </select>
+    <!--由首页根据博客id查询所有的博客显示在博客页-->
+    <select id="getFirstPageBlogByBlogId" resultMap="firstPageBlog">
+        select b.id,b.title,b.flag,b.first_picture,b.content,b.views,b.recommened,b.create_time,b.update_time,t.name,u.nick_name
+        from blog.t_blog b,blog.t_type t,blog.t_user u
+        where b.type_id = t.id and b.user_id =u.id and b.id = #{blogId}
+        order by b.create_time desc
+    </select>
+    <select id="getFirstPageBlog" resultMap="firstPageBlog">
+        select b.id,b.title,b.flag,b.first_picture,b.content,b.views,b.recommened,b.create_time,b.update_time,t.name,u.nick_name
+        from blog.t_blog b,blog.t_type t,blog.t_user u
+        where b.type_id = t.id and b.user_id =u.id
+        order by b.create_time desc
+    </select>
+    <resultMap id="firstPageBlog" type="com.liu.entity.FirstPageBlog">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="flag" column="flag"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="content" column="content"/>
+        <result property="views" column="views"/>
+        <result property="recommened" column="recommened"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="typeName" column="name"/>
+        <result property="userName" column="nick_name"/>
+    </resultMap>
+<!--    搜索文章-->
+    <select id="getSearchBlog" resultMap="firstPageBlog">
+        <bind name="pattern" value="'%'+query+'%'"/>
+        select b.id,b.title,b.flag,b.first_picture,b.content,b.views,b.recommened,b.update_time,t.name,u.nick_name
+        from blog.t_blog b,blog.t_type t,blog.t_user u
+        where b.type_id = t.id and b.user_id =u.id and (b.title like #{pattern} or b.content like #{pattern})
+        order by b.update_time desc
+    </select>
+<!--    根据是否推荐查询博客-->
+    <select id="getBlogByRecommened" resultType="Blog">
+        select id,title,recommened from blog.t_blog b where b.recommened = #{recommened}  order by create_time desc limit 3
+    </select>
+    <select id="getBlogTotal" resultType="Integer">
+        select count(*) from blog.t_blog
+    </select>
+    <select id="getBlogViewTotal" resultType="Integer">
+        select coalesce (sum (views),0) from blog.t_blog
+    </select>
+    <select id="getBlogCommentTotal" resultType="Integer">
+        select count(*) from blog.t_comment
+    </select>
+    <select id="getBlogMessageTotal" resultType="Integer">
+        select count(*) from blog.t_message
+    </select>
+<!--     //查询博客详情-->
+    <select id="getDetailedBlog" resultMap="detailedBlog">
+        select b.id,b.title,b.content,b.update_time,b.create_time,b.views,b.comment_count,b.commentabled,b.share_statement,b.appreciation,u.nick_name
+        from blog.t_blog b,blog.t_user u
+        where b.user_id = u.id and b.id = #{id}
+    </select>
+    <resultMap id="detailedBlog" type="com.liu.entity.DetailedBlog">
+         <result property="id" column="id"/>
+         <result property="title" column="title"/>
+         <result property="content" column="content"/>
+         <result property="updateTime" column="update_time"/>
+         <result property="createTime" column="create_time"/>
+         <result property="views" column="views"/>
+         <result property="commentCount" column="comment_count"/>
+         <result property="commentabled" column="commentabled"/>
+         <result property="shareStatement" column="shareStatement"/>
+         <result property="apperciation" column="apperciation"/>
+         <result property="nickName" column="nick_name"/>
+    </resultMap>
+<!--    文章访问自增-->
+    <update id="updateViews">
+        update blog.t_blog b
+        set b.views = b.views +1
+        where b.id = #{id}
+    </update>
+<!--    根据博客id查询出评论数量-->
+    <update id="getCommentCountByid">
+        update blog.t_blog b
+        set b.comment_count = (select count(*) from blog.t_comment c where c.blog_id = #{id} and b.id = #{id})
+        where b.id = #{id}
+    </update>
+
+<!--    查询最火的十条博客-->
+    <select id="getBlogByViews" resultType="Blog">
+        select * from blog.t_blog order by views limit 8
+    </select>
+</mapper>

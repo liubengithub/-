@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.FriendLinkMapper">
+    <select id="friendLinkList" resultType="FriendLink">
+        select * from blog.t_friend
+    </select>
+    <select id="getFriendLinkById" resultType="FriendLink">
+        select * from blog.t_friend where id = #{id}
+    </select>
+    <select id="getFriendLinkByBlogAddress" resultType="FriendLink">
+        select * from blog.t_friend where blogaddress = #{blogaddress}
+    </select>
+    <delete id="deleteFriendLink" parameterType="Long">
+        delete from blog.t_friend where id = #{id}
+    </delete>
+    <insert id="addFriendLink" parameterType="FriendLink">
+        insert into blog.t_friend(id,blogaddress,blogname,create_time,pictureaddress)
+        values(#{id},#{blogAddress},#{blogName},#{createTime},#{pictureAddress})
+    </insert>
+    <update id="updateFriendLink" parameterType="FriendLink">
+        update blog.t_friend
+        set blogname= #{blogName},blogaddress = #{blogAddress},pictureaddress=#{pictureAddress},create_time = #{createTime}
+        where id = #{id}
+    </update>
+</mapper>

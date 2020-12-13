@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="author" content="www.lzqcode.com" />
+    <meta name="robots" content="all" />
+    <title>我的博客</title>
+    <link rel="stylesheet" th:href="@{/site/font-awesome/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/site/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/master.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/gloable.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/nprogress.css}" />
+    <link rel="stylesheet" th:href="@{/site/css/blog.css}" />
+</head>
+<body>
+    <div class="header">
+    </div>
+   <div th:replace="~{comm/commons::topbar}"></div>
+    <div class="doc-container" id="doc-container">
+        <div class="container-fixed">
+		    <div class="col-content">
+		        <div class="inner" >
+		            <article class="article-list bloglist" id="LAY_bloglist"  th:each="blog : ${pageInfo.getList()}">
+						<section class="article-item zoomIn article">
+							<div class="fc-flag" th:if="${blog.recommened} == true">置顶</div>
+							<h5 class="title">       
+								<span class="fc-blue" th:text="${blog.flag}">【原创】</span>
+								<a th:href="@{/read/{id}(id=${blog.id})}" th:text="${blog.title}">Java学习路线推荐</a>
+							</h5>   
+							<div class="time">       
+								<span class="day" th:text="${#dates.day(blog.createTime)}">1</span>
+								<span class="month fs-18" th:text="${#dates.month(blog.createTime)}">7<span class="fs-14">月</span></span>
+								<span class="year fs-18 ml10" th:text="${#dates.year(blog.createTime)}">2020</span>
+							</div>   
+							<div class="content">
+								<a th:href="@{/read/{id}(id=${blog.id})}" class="cover img-light">
+									<img th:src="@{/site/image/java.jpg}">
+								</a>
+								[[ ${blog.content} ]]
+							</div>   
+							<div class="read-more">       
+								<a th:href="@{/read/{id}(id=${blog.id})}" class="fc-black f-fwb">继续阅读</a>
+							</div>    
+							<aside class="f-oh footer">       
+								<div class="f-fl tags">           
+									<span class="fa fa-tags fs-16"></span>           
+									<a class="tag" th:text="${blog.typeName}">java路线</a>
+								</div>       
+								<div class="f-fr">           
+									<span class="read">               
+										<i class="fa fa-eye fs-16"></i>               
+										<i class="num" th:text="${blog.views}">213</i>
+									</span>           
+									<span class="ml20">               
+										<i class="fa fa-comments fs-16"></i>               
+										<a th:href="@{javascript:void(0)}" class="num fc-grey">1</a>           
+									</span>       
+								</div>   
+							</aside>
+						</section>
+		            </article>
+					<div class="pagination-wrapper" style="padding-left: 435px;padding-right:435px;padding-top: 20px;padding-bottom: 20px;">
+						<div class="pagination">
+							<ul style="background: white">
+								<li>
+									<span class="pageinfo">共 <strong th:text="${pageInfo.pages}">1</strong>页<strong th:text="${pageInfo.total}">1</strong>条记录</span>
+								</li>
+						    </ul>
+						</div>
+					</div>
+				</div>
+		    </div>
+		    <div class="col-other">
+		        <div class="inner">
+					<div class="other-item" id="categoryandsearch">
+			    		<div class="search">
+					        <label class="search-wrap">
+								<form name="search" th:action="@{/search}" method="post">
+					            <input type="text" id="searchtxt" placeholder="输入关键字搜索" name="query" th:value="${query}"/>
+					            <span class="search-icon">
+					                <i class="fa fa-search" onclick="document.forms['search'].submit()"></i>
+					            </span>
+								</form>
+					        </label>
+			        		<ul class="search-result"></ul>
+			    		</div>
+			    		<ul class="category mt20" id="category">
+				        	<li data-index="0" class="slider"></li>
+				        	<li data-index="1"><a th:href="@{/article}">全部文章</a></li>
+				            <li data-index="2"><a th:href="@{/article/{id}(id=${types.get(0).getId()})}" th:text="${types.get(0).getName()}">Java</a></li>
+				            <li data-index="3"><a th:href="@{/article/{id}(id=${types.get(1).getId()})}" th:text="${types.get(1).getName()}">前端</a></li>
+				            <li data-index="4"><a th:href="@{/article/{id}(id=${types.get(2).getId()})}" th:text="${types.get(2).getName()}">Python</a></li>
+				            <li data-index="5"><a th:href="@{/article/{id}(id=${types.get(3).getId()})}" th:text="${types.get(3).getName()}">PHP</a></li>
+				            <li data-index="5"><a th:href="@{/article/{id}(id=${types.get(4).getId()})}" th:text="${types.get(4).getName()}">PHP</a></li>
+			    		</ul>
+					</div>
+					<!--右边悬浮 平板或手机设备显示-->
+					<div class="category-toggle"><i class="layui-icon">&#xe603;</i></div>
+					<div class="article-category">
+					    <div class="article-category-title">分类导航</div>
+					            <a th:href="@{/Blog/Article/1/}">Java</a>
+					            <a th:href="@{/Blog/Article/2/}">前端</a>
+					            <a th:href="@{/Blog/Article/3/}">Python</a>
+					            <a th:href="@{/Blog/Article/4/}">PHP</a>
+					            <a th:href="@{/Blog/Article/5/}">其它</a>
+					    <div class="f-cb"></div>
+					</div>
+					<!--遮罩-->
+					<div class="blog-mask animated layui-hide"></div>
+					<div class="other-item">
+					    <h5 class="other-item-title">热门文章</h5>
+					    <div class="inner">
+					        <ul class="hot-list-article">
+					                <li> <a th:href="@{/article/query/{id}(id=${viewsBlogs.get(0).getId()})}" th:text="${viewsBlogs.get(0).getTitle()}">SpringBoot 入门爬虫项目实战</a></li>
+					                <li> <a th:href="@{/article/query/{id}(id=${viewsBlogs.get(1).getId()})}" th:text="${viewsBlogs.get(1).getTitle()}">SpringBoot 2.x 教你快速入门</a></li>
+					                <li> <a th:href="@{/article/query/{id}(id=${viewsBlogs.get(2).getId()})}" th:text="${viewsBlogs.get(2).getTitle()}">java学习路线</a></li>
+					                <li> <a th:href="@{/article/query/{id}(id=${viewsBlogs.get(3).getId()})}" th:text="${viewsBlogs.get(3).getTitle()}">基于SpringBoot+JWT+Redis跨域单点登录的实现</a></li>
+					                <li> <a th:href="@{/article/query/{id}(id=${viewsBlogs.get(4).getId()})}" th:text="${viewsBlogs.get(4).getTitle()}">SpringBoot 中如何使用SwaggerAPI接口文档？</a></li>
+					                <li> <a th:href="@{/article/query/{id}(id=${viewsBlogs.get(5).getId()})}" th:text="${viewsBlogs.get(5).getTitle()}">小白轻松入门Redis</a></li>
+					        </ul>
+					    </div>
+					</div>
+					<div class="other-item">
+					    <h5 class="other-item-title">置顶推荐</h5>
+					    <div class="inner">
+					        <ul class="hot-list-article">
+					                <li> <a th:href="@{/article/query/{id}(id=${blogs.get(0).getId()})}" th:text="${blogs.get(0).getTitle()}">java学习路线</a></li>
+					                <li> <a th:href="@{/article/query/{id}(id=${blogs.get(1).getId()})}" th:text="${blogs.get(1).getTitle()}">基于SpringBoot+JWT+Redis跨域单点登录的实现</a></li>
+					                <li> <a th:href="@{/article/query/{id}(id=${blogs.get(2).getId()})}" th:text="${blogs.get(2).getTitle()}">小白轻松入门Redis</a></li>
+					        </ul>
+					    </div>
+					</div>
+					<div class="other-item">
+					    <h5 class="other-item-title">最近访客</h5>
+					    <div class="inner">
+					        <dl class="vistor">
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a1.png}"><cite>Anonymous</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a4.png}"><cite>Dekstra</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a2.png}"><cite>惜i</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a3.png}"><cite>↙Aㄨ计划 ◆莪↘</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a4.png}"><cite>.</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a1.png}"><cite>Lambert.</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a2.png}"><cite>64ღ</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a3.png}"><cite>doBoor</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a4.png}"><cite>毛毛小妖</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a1.png}"><cite>NULL</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a2.png}"><cite>吓一跳</cite></a></dd>
+					                <dd><a th:href="@{javasript:;}"><img th:src="@{/site/image/a3.png}"><cite>如初</cite></a></dd>
+					        </dl>
+					    </div>
+					</div>
+		        </div>
+		    </div>
+		</div>
+    </div>
+   <div th:replace="~{comm/commons::footbar}"></div>
+    <script th:src="@{/site/layui/layui.js}"></script>
+    <script th:src="@{/site/js/yss/gloable.js}"></script>
+    <script th:src="@{/site/js/plugins/nprogress.js}"></script>
+    <script>NProgress.start();</script>
+ 	<script th:src="@{/site/js/yss/article.js}"></script>
+    <script> 
+        window.onload = function () {
+            NProgress.done();
+        };
+
+    </script>
+</body>
+</html>
