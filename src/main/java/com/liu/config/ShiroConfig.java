@@ -17,8 +17,6 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
-
-
     @Bean
     public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("getDefaultWebSecurityManager")DefaultWebSecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
